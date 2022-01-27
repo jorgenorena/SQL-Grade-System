@@ -1,3 +1,10 @@
+CREATE ROLE teacher WITH LOGIN NOSUPERUSER;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT USAGE, SELECT, INSERT, UPDATE, DELETE ON TABLES TO teacher;
+
+CREATE ROLE assistant WITH LOGIN NOSUPERUSER;
+
 CREATE TABLE students (
   id SERIAL PRIMARY KEY,
   full_name varchar(100) NOT NULL,
@@ -36,6 +43,24 @@ CREATE TABLE assistants (
 );
 
 CREATE TABLE assistants_courses (
-  assistant_id int REFERENCES assistnts(id),
+  assistant_id int REFERENCES assistants(id),
   course_id int REFERENCES courses(id)
 );
+
+ALTER TABLE grades ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY assistant_grades_rls ON grades
+TO assistant
+USING (inscription_id IN (
+	SELECT students_courses.id
+  FROM students_courses
+  JOIN assistants_courses
+  ON students_courses.course_id = assistants_courses.course_id
+  JOIN assistants
+  ON assistants.id = assistants_courses.assistant_id
+  WHERE assistants.username = current_user
+));
+
+GRANT SELECT ON students, courses, students_courses TO assistant;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON grades TO assistant;
