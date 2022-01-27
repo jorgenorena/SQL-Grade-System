@@ -26,3 +26,16 @@ CREATE TABLE grades (
   weight float DEFAULT 1.0, /* Weight of the grade when computing final grade */
   description text /* Which evaluation gave this grade */
 );
+
+CREATE TABLE assistants (
+  id SERIAL PRIMARY KEY,
+  full_name varchar(100) NOT NULL,
+  email varchar(100) UNIQUE NOT NULL,
+  identity_number varchar(100) UNIQUE,
+  username varchar(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE assistants_courses (
+  assistant_id int REFERENCES assistnts(id),
+  course_id int REFERENCES courses(id)
+);
