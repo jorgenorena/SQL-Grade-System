@@ -10,6 +10,6 @@ WITH id_table AS (
     students.full_name = 'Danilo Ruiz' AND
   	courses.name = 'Numerical Methods'
 )
-INSERT INTO grades (id, grade, description)
+INSERT INTO grades (inscription_id, grade, description)
 SELECT id_table.id, 6.5, 'Tarea 4'
 FROM id_table;

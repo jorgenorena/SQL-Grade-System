@@ -61,6 +61,12 @@ USING (inscription_id IN (
   WHERE assistants.username = current_user
 ));
 
-GRANT SELECT ON students, courses, students_courses TO assistant;
+GRANT SELECT ON 
+  students, 
+  courses, 
+  students_courses, 
+  assistants_courses,
+  assistants
+TO assistant;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON grades TO assistant;
